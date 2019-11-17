@@ -43,6 +43,28 @@ andThen apply ( a, c ) =
     ( b, c ++ d )
 
 
+updateRoute : Route -> Model -> ( Model, List (Cmd msg) )
+updateRoute route model =
+    ( model, [ Navigation.newUrl <| path route ] )
+
+
+createPost : Model -> ( Model, List (Cmd msg) )
+createPost model =
+    let
+        post =
+            { id = List.length model.posts + 1 |> toString
+            , title = model.form.postTitle
+            , body = model.form.postBody
+            }
+    in
+    ( { model | posts = (::) post model.posts }, [ Cmd.none ] )
+
+
+resetForm : Model -> ( Model, List (Cmd msg) )
+resetForm model =
+    ( { model | form = { email = "", password = "", passwordAgain = "", postTitle = "", postBody = "" } }, [ Cmd.none ] )
+
+
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
@@ -52,4 +74,29 @@ update msg model =
                 |> Tuple.mapSecond batch
 
         UpdateRoute route ->
-            ( model, Navigation.newUrl <| path route )
+            updateRoute route model
+                |> Tuple.mapSecond batch
+
+        OnInput form ->
+            ( { model | form = form }, Cmd.none )
+
+        SignUp ->
+            updateRoute LoginRoute model
+                |> Tuple.mapSecond batch
+
+        Login ->
+            ( { model | user = Just { email = model.form.email } }, [ Cmd.none ] )
+                |> andThen resetForm
+                |> andThen reroute
+                |> Tuple.mapSecond batch
+
+        Logout ->
+            ( { model | user = Nothing }, [ Cmd.none ] )
+                |> andThen (updateRoute HomeRoute)
+                |> Tuple.mapSecond batch
+
+        CreatePost ->
+            createPost model
+                |> andThen resetForm
+                |> andThen (updateRoute HomeRoute)
+                |> Tuple.mapSecond batch

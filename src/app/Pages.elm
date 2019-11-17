@@ -11,7 +11,44 @@ landing : Model -> Html Msg
 landing model =
     Maybe.map userHeader model.user
         |> Maybe.withDefault authHeader
-        |> flip layout (landingBody model.cards)
+        |> flip layout (landingBody model.posts)
+
+
+readPost : String -> Model -> Html Msg
+readPost id model =
+    case List.head <| List.filter (\post -> post.id == id) model.posts of
+        Just post ->
+            Maybe.map userHeader model.user
+                |> Maybe.withDefault authHeader
+                |> flip layout (readPostBody post)
+
+        Nothing ->
+            error "404 Not Found"
+
+
+createPost : Model -> Html Msg
+createPost model =
+    case model.user of
+        Just user ->
+            layout (userHeader user) (createPostBody model.form)
+
+        Nothing ->
+            error "404 Not Found"
+
+
+error : a -> Html msg
+error err =
+    Components.error err
+
+
+login : Model -> Html Msg
+login model =
+    Components.login model.form
+
+
+signUp : Model -> Html Msg
+signUp model =
+    Components.signUp model.form
 
 
 view : Model -> Html Msg
@@ -21,10 +58,10 @@ view model =
             landing model
 
         ReadPostRoute id ->
-            readCard id model
+            readPost id model
 
         CreatePostRoute ->
-            createCard model
+            createPost model
 
         LoginRoute ->
             login model
@@ -34,40 +71,3 @@ view model =
 
         ErrorRoute ->
             error "404 Not Found"
-
-
-readCard : String -> Model -> Html msg
-readCard id model =
-    case List.head <| List.filter (\card -> card.id == id) model.cards of
-        Just card ->
-            Maybe.map userHeader model.user
-                |> Maybe.withDefault authHeader
-                |> flip layout (readCardBody card)
-
-        Nothing ->
-            error "404 Not Found"
-
-
-createCard : Model -> Html msg
-createCard model =
-    case model.user of
-        Just user ->
-            layout (userHeader user) createCardBody
-
-        Nothing ->
-            error "404 Not Found"
-
-
-login : Model -> Html msg
-login model =
-    Components.login
-
-
-signUp : Model -> Html msg
-signUp model =
-    Components.signUp
-
-
-error : a -> Html msg
-error err =
-    Components.error err
