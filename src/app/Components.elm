@@ -2,7 +2,7 @@ module Components exposing (..)
 
 import Html exposing (..)
 import Html.Attributes exposing (..)
-import Models exposing (Card)
+import Models exposing (Card, User)
 
 
 layout : Html msg -> Html msg -> Html msg
@@ -61,3 +61,31 @@ readCardBody card =
 error : a -> Html msg
 error a =
     main_ [ class "container" ] [ text <| toString a ]
+
+
+userHeader : User -> Html msg
+userHeader user =
+    header []
+        [ nav []
+            [ div [ class "nav-wrapper container" ]
+                [ a [ class "btn" ] [ text "New Card" ]
+                , ul [ class "right" ]
+                    [ li [] [ text user.email ]
+                    , li [] [ a [ class "btn" ] [ text "Logout" ] ]
+                    ]
+                ]
+            ]
+        ]
+
+
+createCardBody : Html msg
+createCardBody =
+    main_ [ class "container " ]
+        [ div [ class "row" ]
+            [ Html.form [ class "col s12 m8 offset-m2" ]
+                [ div [ class "input-field" ] [ input [ placeholder "Card Title", type_ "text" ] [] ]
+                , div [ class "input-field" ] [ textarea [ placeholder "Enter card here..." ] [] ]
+                , a [ class "btn right" ] [ text "Create" ]
+                ]
+            ]
+        ]

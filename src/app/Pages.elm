@@ -20,6 +20,11 @@ readCard id model =
             error "404 Not Found"
 
 
+createCard : Model -> Html msg
+createCard model =
+    layout (userHeader model.user) createCardBody
+
+
 error : a -> Html msg
 error err =
     Components.error err
