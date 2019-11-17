@@ -9,7 +9,7 @@ main : Program Never Model msg
 main =
     program
         { init = ( initialModel, Cmd.none )
-        , view = Pages.createCard
+        , view = Pages.landing
         , update = \msg model -> ( model, Cmd.none )
         , subscriptions = \model -> Sub.none
         }

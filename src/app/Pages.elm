@@ -25,6 +25,16 @@ createCard model =
     layout (userHeader model.user) createCardBody
 
 
+login : Model -> Html msg
+login model =
+    Components.login
+
+
+signUp : Model -> Html msg
+signUp model =
+    Components.signUp
+
+
 error : a -> Html msg
 error err =
     Components.error err
