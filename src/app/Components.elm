@@ -44,3 +44,20 @@ cardCard card =
                 ]
             ]
         ]
+
+
+readCardBody : Card -> Html msg
+readCardBody card =
+    main_ [ class "container" ]
+        [ div [ class "row" ]
+            [ div [ class "col l6 offset-l3" ]
+                [ h1 [] [ text <| "ID " ++ card.id ++ ": " ++ card.name ]
+                , List.repeat 10 card.meaning_up |> List.map (\par -> p [] [ text par ]) |> div []
+                ]
+            ]
+        ]
+
+
+error : a -> Html msg
+error a =
+    main_ [ class "container" ] [ text <| toString a ]
