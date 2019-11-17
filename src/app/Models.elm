@@ -25,20 +25,32 @@ type alias Form =
     }
 
 
+type alias Token =
+    { accessToken : String
+    , idToken : String
+    , tokenType : String
+    , expiresIn : Int
+    }
+
+
 type alias Model =
     { posts : List Post
-    , user : Maybe User
-    , route : Route
     , form : Form
+    , route : Route
+    , user : WebData User
+    , token : WebData Token
+    , account : WebData ()
     }
 
 
 initialModel : Model
 initialModel =
     { posts = List.range 1 10 |> List.map toString |> List.map initialPost
-    , user = Nothing -- or Just { email = "email@gmail.com"}
+    , user = NotAsked
+    , form = initialForm
     , route = HomeRoute
-    , form = { email = "", password = "", passwordAgain = "", postTitle = "", postBody = "" }
+    , token = NotAsked
+    , account = NotAsked
     }
 
 
@@ -48,3 +60,8 @@ initialPost id =
     , title = Lorem.sentence 4
     , body = Lorem.paragraphs 2 |> String.concat
     }
+
+
+initialForm : Form
+initialForm =
+    { email = "", password = "", passwordAgain = "", postTitle = "", postBody = "" }

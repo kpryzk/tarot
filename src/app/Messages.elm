@@ -13,3 +13,7 @@ type Msg
     | Login
     | Logout
     | SignUp
+    | OnFetchAccount (WebData ())
+    | OnFetchToken (WebData Token)
+    | OnFetchUser (WebData User)
+    | OnLoadToken (Maybe Token)
