@@ -1,6 +1,7 @@
 module Models exposing (..)
 
 import Lorem
+import Routes exposing (Route(HomeRoute))
 
 
 type alias Card =
@@ -18,7 +19,8 @@ type alias User =
 
 type alias Model =
     { cards : List Card
-    , user : User
+    , user : Maybe User
+    , route : Route
     }
 
 
@@ -35,5 +37,6 @@ initialCard id =
 initialModel : Model
 initialModel =
     { cards = List.range 1 10 |> List.map toString |> List.map initialCard
-    , user = { email = "email@gmail.com" }
+    , user = Nothing
+    , route = HomeRoute
     }

@@ -2,7 +2,10 @@ module Components exposing (..)
 
 import Html exposing (..)
 import Html.Attributes exposing (..)
+import Html.Events exposing (onClick, onInput)
+import Messages exposing (..)
 import Models exposing (Card, User)
+import Routes exposing (..)
 
 
 layout : Html msg -> Html msg -> Html msg
@@ -17,15 +20,15 @@ authHeader =
         [ nav []
             [ div [ class "nav-wrapper container" ]
                 [ ul [ class "right" ]
-                    [ li [] [ a [ class "btn" ] [ text "Login" ] ]
-                    , li [] [ a [ class "btn" ] [ text "Sign Up" ] ]
+                    [ li [] [ a [ href <| path LoginRoute, class "btn" ] [ text "Login" ] ]
+                    , li [] [ a [ href <| path SignUpRoute, class "btn" ] [ text "Sign Up" ] ]
                     ]
                 ]
             ]
         ]
 
 
-landingBody : List Card -> Html msg
+landingBody : List Card -> Html Msg
 landingBody cards =
     main_ [ class "container" ]
         [ List.map cardCard cards
@@ -33,14 +36,14 @@ landingBody cards =
         ]
 
 
-cardCard : Card -> Html msg
+cardCard : Card -> Html Msg
 cardCard card =
     div [ class "col s12 m6 l4" ]
-        [ div [ class "card small hoverable grey lighten-4" ]
+        [ div [ onClick <| UpdateRoute <| ReadPostRoute card.id, class "card small hoverable grey lighten-4" ]
             [ div [ class "card-content" ]
                 [ span [ class "card-title medium" ]
-                    [ text <| "ID " ++ card.id ++ ": " ++ card.name ]
-                , p [] [ text card.meaning_up ]
+                    [ text card.name ]
+                , p [] [ text <| String.left 300 card.meaning_up ]
                 ]
             ]
         ]
